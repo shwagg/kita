@@ -30,11 +30,11 @@ and any database settings.
 
 ## Important Change with index.php
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
+`index.php` is no longer in the root of the project! It has been moved inside the _public_ folder,
 for better security and separation of components.
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
+This means that you should configure your web server to "point" to your project's _public_ folder, and
+not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter _public/..._, as the rest of your logic and the
 framework are exposed.
 
 **Please** read the user guide for a better explanation of how CI4 works!
@@ -56,6 +56,7 @@ PHP version 8.2 or higher is required, with the following extensions installed:
 - [mbstring](http://php.net/manual/en/mbstring.installation.php)
 
 > [!WARNING]
+>
 > - The end of life date for PHP 7.4 was November 28, 2022.
 > - The end of life date for PHP 8.0 was November 26, 2023.
 > - The end of life date for PHP 8.1 was December 31, 2025.
@@ -67,3 +68,55 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 - json (enabled by default - don't turn it off)
 - [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
 - [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+
+## Binan City Hall Lost and Found Starter
+
+This project now includes a simple login and dashboard starter for a lost-and-found registry.
+
+### Features added
+
+- Staff login with session-based authentication.
+- Protected dashboard page.
+- Add and list found-item records.
+- Mark an item as claimed.
+- MySQL migrations and starter admin seeder.
+
+### CodeIgniter 4 parts used
+
+- Routes: maps URLs to controllers.
+- Controllers: receives request, validates input, and returns a view.
+- Models: database access for `users` and `lost_items`.
+- Filters: `auth` filter protects dashboard routes.
+- Migrations: version-controlled table creation.
+- Seeder: inserts starter admin credentials.
+
+### Setup steps
+
+1. Create a MySQL database named `kita`.
+2. Review `.env` and confirm DB credentials.
+3. Run migrations:
+
+   ```bash
+   php spark migrate
+   ```
+
+4. Seed the default admin user:
+
+   ```bash
+   php spark db:seed UserSeeder
+   ```
+
+5. Open the app in browser:
+   - XAMPP: `http://localhost/kita/public/`
+   - Spark server (optional): update `app.baseURL` then run `php spark serve`
+
+### Default login
+
+- Username: `admin`
+- Password: `admin123`
+
+### Manual SQL option
+
+If you prefer SQL import instead of migrations, use:
+
+- `database/lost_and_found_schema.sql`
