@@ -48,6 +48,15 @@
             padding: 0 16px 32px;
         }
 
+        .layout-full {
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            min-height: 100dvh;
+        }
+
         .card {
             background: var(--card);
             border: 1px solid var(--line);
@@ -139,33 +148,42 @@
             .container { margin-top: 16px; }
         }
     </style>
+    <?= $this->renderSection('head') ?>
 </head>
 <body>
-    <div class="topbar">
-        <div>
-            <strong>Binan City Hall</strong>
-            <span>Lost and Found Registry</span>
-        </div>
-        <div>
-            <?php if (session()->get('isLoggedIn')): ?>
-                <span><?= esc((string) session('full_name')) ?></span>
-                <a href="<?= site_url('logout') ?>" style="margin-left:12px;">Logout</a>
-            <?php else: ?>
-                <a href="<?= site_url('login') ?>">Login</a>
-            <?php endif; ?>
-        </div>
-    </div>
+    <?php
+    $hideTopbar = trim((string) $this->renderSection('hideTopbar')) === '1';
+    $fullWidth = trim((string) $this->renderSection('fullWidth')) === '1';
+    ?>
 
-    <main class="container">
-        <?php if (session()->getFlashdata('success')): ?>
+    <?php if (!$hideTopbar): ?>
+        <div class="topbar">
+            <div>
+                <strong>Binan City Hall</strong>
+                <span>Lost and Found Registry</span>
+            </div>
+            <div>
+                <?php if (session()->get('isLoggedIn')): ?>
+                    <span><?= esc((string) session('full_name')) ?></span>
+                    <a href="<?= site_url('logout') ?>" style="margin-left:12px;">Logout</a>
+                <?php else: ?>
+                    <a href="<?= site_url('login') ?>">Login</a>
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <main class="<?= $fullWidth ? 'layout-full' : 'container' ?>">
+        <?php if (!$fullWidth && session()->getFlashdata('success')): ?>
             <div class="alert alert-success"><?= esc((string) session()->getFlashdata('success')) ?></div>
         <?php endif; ?>
 
-        <?php if (session()->getFlashdata('error')): ?>
+        <?php if (!$fullWidth && session()->getFlashdata('error')): ?>
             <div class="alert alert-error"><?= esc((string) session()->getFlashdata('error')) ?></div>
         <?php endif; ?>
 
         <?= $this->renderSection('content') ?>
     </main>
+    <?= $this->renderSection('scripts') ?>
 </body>
 </html>
