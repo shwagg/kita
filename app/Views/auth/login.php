@@ -4,7 +4,9 @@
 <?= $this->section('fullWidth') ?>1<?= $this->endSection() ?>
 
 <?= $this->section('head') ?>
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <style>
 body {
@@ -191,8 +193,41 @@ body {
                 <p class="text-muted mt-4 mb-0 form-note">
                     Demo admin account: username <strong>admin</strong>, password <strong>admin123</strong>
                 </p>
+                    <hr>
+                    <button id="fetchUsersBtn" class="btn btn-outline-success w-100 mb-2">Show All Users (AJAX Demo)</button>
+                    <ul id="usersList" class="list-group"></ul>
             </div>
         </div>
     </div>
 </div>
+<?= $this->endSection() ?>
+
+<?= $this->section('scripts') ?>
+<script>
+$(function() {
+    $('#fetchUsersBtn').on('click', function() {
+        $.ajax({
+            url: '<?= site_url('api/users') ?>',
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                var $list = $('#usersList');
+                $list.empty();
+                if (Array.isArray(data) && data.length) {
+                    data.forEach(function(user) {
+                        $list.append('<li class="list-group-item">' +
+                            '<strong>' + user.username + '</strong> (' + user.full_name + ', ' + user.role + ')'
+                        );
+                    });
+                } else {
+                    $list.append('<li class="list-group-item">No users found.</li>');
+                }
+            },
+            error: function() {
+                $('#usersList').html('<li class="list-group-item text-danger">Failed to fetch users.</li>');
+            }
+        });
+    });
+});
+</script>
 <?= $this->endSection() ?>

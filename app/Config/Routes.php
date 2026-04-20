@@ -15,3 +15,5 @@ $routes->group('', ['filter' => 'auth'], static function (RouteCollection $route
 	$routes->post('items', 'DashboardController::store');
 	$routes->post('items/(:num)/claim', 'DashboardController::claim/$1');
 });
+
+$routes->get('api/users', 'ApiUserController::index');
